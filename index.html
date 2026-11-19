@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mírwen | Maternidad</title>
+
+    <!-- Fuentes e iconos externos necesarios para la tipografía y los botones -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* === 1. VARIABLES Y RESETEO === */
+        /* Paleta de colores reutilizables en todo el sitio */
+        :root {
+            --v-hdr: #a0c3b2; /* Verde salvia suave para el encabezado y botones activos */
+            --v-bg: #e8f0ec;  /* Verde menta clarito para fondos secundarios */
+            --rosa: #f4c2c2;  /* Rosa pastel cálido para botones destacados */
+            --cafe: #4a3e3d;  /* Café oscuro para máxima legibilidad en textos */
+            --gris: #6e6565;  /* Gris cálido para textos secundarios y detalles */
+            --bg: #faf7f2;    /* Beige cremoso suave para el fondo general */
+        }
+
+        /* Reseteo para quitar márgenes por defecto del navegador */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* Estilos base del documento */
+        body { font-family: 'Quicksand', sans-serif; color: var(--cafe); background: #f5efe6; line-height: 1.5; }
+
+        /* === 2. CABECERA Y NAVEGACIÓN === */
+        /* Barra superior fija al hacer scroll */
+        header { position: sticky; top: 0; z-index: 100; background: var(--v-hdr); }
+
+        /* Contenedor flexible de la navegación */
+        nav { display: flex; justify-content: space-between; align-items: center; height: 60px; padding: 0 5%; }
+        
+        /* Logo del sitio */
+        .logo { font-weight: 100; font-size: 1.4rem; color: var(--cafe); text-decoration: none; }
+        
+        /* Enlaces del menú alineados */
+        .nav-links { display: flex; gap: 15px; align-items: center; }
+        .nav-links a { color: var(--cafe); text-decoration: none; font-weight: 700; }
+        
+        /* Botón rosa en el menú */
+        .btn-nav { background: var(--rosa); border: none; padding: 8px 15px; border-radius: 20px; font-weight: 700; cursor: pointer; }
+        
+        /* Botón de menú hamburguesa (oculto en pantallas grandes) */
+        .mobile-toggle { display: none; font-size: 1.5rem; cursor: pointer; }
+
+        /* === 3. SECCIÓN PRINCIPAL (HERO) === */
+        /* Bloque de bienvenida con texto e imagen centrados */
+        .hero { display: flex; align-items: center; padding: 40px 5%; gap: 30px; background: var(--bg); }
+        .hero-text { flex: 1; }
+        .hero-text h1 { font-size: 2rem; margin-bottom: 10px; }
+        .hero-text p { color: var(--gris); margin-bottom: 20px; }
+        .hero-buttons { display: flex; gap: 10px; }
+        
+        /* Botones de acción principales */
+        .btn-main { background: var(--rosa); border: none; padding: 10px 20px; border-radius: 20px; font-weight: 700; cursor: pointer; }
+        .btn-sec { border: 1px solid var(--cafe); padding: 10px 20px; border-radius: 20px; color: var(--cafe); text-decoration: none; font-weight: 700; }
+        
+        /* Marco circular para la imagen principal */
+        .circle-container { 
+            width: 300px; 
+            height: 300px; 
+            border-radius: 50%;
+            overflow: hidden; 
+            background: transparent; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .circle-container img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; /* Ajusta la imagen para llenar todo el círculo sin deformarse */
+        }
+
+        /* === 4. SECCIÓN DE GUÍAS Y PESTAÑAS === */
+        .guia-section { padding: 40px 5%; }
+        
+        /* Cuadrícula para organizar las 4 pestañas superiores */
+        .menu-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px 0; }
+        
+        /* Estilo base de los botones de cada pestaña */
+        .tab-btn { padding: 12px; border: 1px solid #ddd; background: #fff; border-radius: 8px; cursor: pointer; font-weight: 700; color: var(--cafe); }
+        
+        /* Estado activo cuando la pestaña está seleccionada */
+        .tab-btn.active { background: var(--v-hdr); color: #fff; border-color: var(--v-hdr); }
+        
+        /* Paneles de contenido: ocultos por defecto, visibles cuando tienen la clase "active" */
+        .tab-panel { display: none; background: var(--bg); padding: 60px; border-radius: 4px; }
+        .tab-panel.active { display: block; }
+        
+        /* Organización en 2 columnas para el contenido interno */
+        .panel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px; }
+        
+        /* Tarjetas de información con un borde de acento en la izquierda */
+        .card { background: #fff; padding: 15px; border-radius: 8px; border-left: 4px solid var(--v-hdr); }
+        .card h4 { margin-bottom: 10px; }
+        .card ul { list-style: none; }
+        .card li { margin-bottom: 5px; color: var(--gris); font-size: 0.9rem; }
+        
+        /* Caja promocional para consultar a la IA */
+        .ask-ai-banner { margin-top: 20px; background: var(--v-bg); padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+
+        /* === 5. VENTANA FLOTANTE DEL CHAT (MODAL) === */
+        /* Fondo oscuro superpuesto para bloquear el fondo cuando se abre el chat */
+        .modal-chat { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 200; justify-content: center; align-items: center; }
+        .modal-chat.show { display: flex; } /* Activa la ventana cuando se abre */
+        
+        /* Caja del chat con scroll */
+        .chat-box { background: #fff; width: 90%; max-width: 400px; height: 450px; border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; }
+        .chat-header { background: var(--v-hdr); padding: 15px; display: flex; justify-content: space-between; font-weight: 700; }
+        .chat-body { flex: 1; padding: 15px; overflow-y: auto; background: var(--bg); display: flex; flex-direction: column; gap: 10px; }
+        
+        /* Burbujas de chat del usuario y de la IA */
+        .msg { padding: 8px 12px; border-radius: 8px; max-width: 85%; font-size: 0.9rem; }
+        .msg.ia { background: #fff; align-self: flex-start; border: 1px solid #ddd; }
+        .msg.user { background: var(--rosa); align-self: flex-end; }
+        
+        /* Pie del chat con caja de texto e icono de envío */
+        .chat-footer { padding: 10px; display: flex; gap: 10px; border-top: 1px solid #ddd; }
+        .chat-footer input { flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px; outline: none; }
+        .chat-footer button { background: var(--v-hdr); border: none; padding: 0 15px; border-radius: 4px; cursor: pointer; font-weight: 700; }
+
+        /* Pie de página simple */
+        footer { background: var(--v-hdr); padding: 20px 5%; text-align: center; font-size: 0.85rem; }
+
+        /* === 6. RESPONSIVO PARA CELULARES === */
+        @media(max-width: 768px) {
+            .hero { flex-direction: column; text-align: center; }
+            .menu-tabs { grid-template-columns: 1fr 1fr; }
+            .panel-grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; position: absolute; top: 60px; left: 0; width: 100%; background: var(--v-hdr); flex-direction: column; padding: 15px; }
+            .nav-links.show { display: flex; }
+            .mobile-toggle { display: block; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CABECERA -->
+    <header>
+        <nav>
+            <a href="#" class="logo">Mírwen</a>
+            <div class="mobile-toggle" id="mobile-toggle"><i class="fa-solid fa-bars"></i></div>
+            <div class="nav-links" id="nav-links">
+                <a href="#inicio">Inicio</a>
+                <a href="#guia">Guía</a>
+                <button class="btn-abrir-chat btn-nav">Consultar IA</button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- SECCIÓN PRINCIPAL -->
+        <section class="hero" id="inicio">
+            <div class="hero-text">
+                <h1>Acompañamiento en tu embarazo</h1>
+                <p>Apoyo, guías prácticas y asistencia con inteligencia artificial disponible las 24 horas.</p>
+                <div class="hero-buttons">
+                    <button class="btn-abrir-chat btn-main">Hablar con IA</button>
+                    <a href="#guia" class="btn-sec">Ver Guías</a>
+                </div>
+            </div>
+            <div class="circle-container">
+                <img src="osoreal2.jpg" alt="Maternidad">
+            </div>
+        </section>
+
+        <!-- SECCIÓN DE PESTAÑAS (GUÍAS) -->
+        <section class="guia-section" id="guia">
+            <h2>Guía para Futuras Mamás</h2>
+            
+            <!-- Botones controladores de pestañas -->
+            <div class="menu-tabs">
+                <button class="tab-btn active" data-tab="tab-1">Nutrición</button>
+                <button class="tab-btn" data-tab="tab-2">Ejercicio</button>
+                <button class="tab-btn" data-tab="tab-3">Descanso</button>
+                <button class="tab-btn" data-tab="tab-4">Parto</button>
+            </div>
+
+            <!-- Panel 1: Nutrición -->
+            <div class="tab-panel active" id="tab-1">
+                <h3>Alimentación y Nutrición</h3>
+                <div class="panel-grid">
+                    <div class="card">
+                        <h4>Recomendados</h4>
+                        <ul>
+                            <li><strong>Ácido Fólico:</strong> Espinacas, legumbres.</li>
+                            <li><strong>Hierro y Proteína:</strong> Carnes magras, huevos cocidos.</li>
+                            <li><strong>Calcio:</strong> Yogurt, lácteos pasteurizados.</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4>A evitar</h4>
+                        <ul>
+                            <li>Carnes o pescados crudos (sushi).</li>
+                            <li>Lácteos sin pasteurizar.</li>
+                            <li>Exceso de cafeína y alcohol.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="ask-ai-banner">
+                    <span>¿Dudas sobre un alimento?</span>
+                    <button class="btn-abrir-chat btn-nav">Preguntar a IA</button>
+                </div>
+            </div>
+
+            <!-- Panel 2: Ejercicio -->
+            <div class="tab-panel" id="tab-2">
+                <h3>Ejercicio Físico</h3>
+                <div class="panel-grid">
+                    <div class="card">
+                        <h4>Beneficiosos</h4>
+                        <ul>
+                            <li>Caminatas diarias (20-30 min).</li>
+                            <li>Yoga prenatal.</li>
+                            <li>Pilates adaptado.</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4>Precauciones</h4>
+                        <ul>
+                            <li>Evitar deportes de impacto o caídas.</li>
+                            <li>Evitar sobreesfuerzos abdominales.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel 3: Descanso -->
+            <div class="tab-panel" id="tab-3">
+                <h3>Bienestar y Sueño</h3>
+                <div class="panel-grid">
+                    <div class="card">
+                        <h4>Para el descanso</h4>
+                        <ul>
+                            <li>Dormir sobre el lado izquierdo.</li>
+                            <li>Usar almohada entre las piernas.</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4>Salud emocional</h4>
+                        <ul>
+                            <li>Expresar emociones con tu red de apoyo.</li>
+                            <li>Practicar ejercicios de respiración.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel 4: Parto -->
+            <div class="tab-panel" id="tab-4">
+                <h3>Preparación para el Parto</h3>
+                <div class="panel-grid">
+                    <div class="card">
+                        <h4>Maleta del Hospital</h4>
+                        <ul>
+                            <li>Documentos e historial médico.</li>
+                            <li>Ropa cómoda para mamá y bebé.</li>
+                            <li>Artículos de aseo.</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4>Cuándo acudir al médico</h4>
+                        <ul>
+                            <li>Contracciones cada 5 minutos.</li>
+                            <li>Ruptura de fuente o sangrado.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- VENTANA MODAL DEL CHAT -->
+    <div class="modal-chat" id="modalChat">
+        <div class="chat-box">
+            <div class="chat-header">
+                <span>Asistente Mírwen</span>
+                <button id="cerrarChat" style="background:none; border:none; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="chat-body" id="chatBody">
+                <div class="msg ia">Hola, ¿en qué puedo ayudarte con tu embarazo?</div>
+            </div>
+            <div class="chat-footer">
+                <input type="text" id="userInput" placeholder="Escribe tu consulta...">
+                <button id="sendBtn"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PIE DE PÁGINA -->
+    <footer>
+        <p>&copy; 2026 Mírwen. Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- LÓGICA JAVASCRIPT NATIVA PARA OLLAMA -->
+    <script>
+        // === 1. CAMBIO DE PESTAÑAS ===
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabPanels = document.querySelectorAll('.tab-panel');
+
+        tabBtns.forEach(b => b.addEventListener('click', () => {
+            tabBtns.forEach(x => x.classList.remove('active'));
+            tabPanels.forEach(x => x.classList.remove('active'));
+
+            b.classList.add('active');
+            document.getElementById(b.dataset.tab).classList.add('active');
+        }));
+
+        // === 2. MENÚ DESPLEGABLE PARA CELULARES ===
+        document.getElementById('mobile-toggle').addEventListener('click', () => {
+            document.getElementById('nav-links').classList.toggle('show');
+        });
+
+        // === 3. CONTROL Y CONEXIÓN AL MODELO OLLAMA NATIVO ===
+        const modalChat = document.getElementById('modalChat');
+        const chatBody = document.getElementById('chatBody');
+        const userInput = document.getElementById('userInput');
+
+        const historialMensajes = [
+            {
+                role: "system",
+                content: "Eres Mírwen, una asistente virtual empática y experta en maternidad y embarazo. Respondes a las mamás de forma cálida, clara y comprensiva sobre los 9 meses de gestación y la maternidad. Siempre aclaras de forma sutil que para diagnósticos médicos oficiales deben consultar a su médico."
+            }
+        ];
+
+        document.querySelectorAll('.btn-abrir-chat').forEach(b => {
+            b.addEventListener('click', () => modalChat.classList.add('show'));
+        });
+
+        document.getElementById('cerrarChat').addEventListener('click', () => {
+            modalChat.classList.remove('show');
+        });
+        async function enviarMensaje() {
+            const t = userInput.value.trim();
+            if (!t) return;
+
+            chatBody.innerHTML += `<div class="msg user">${t}</div>`;
+            userInput.value = '';
+            chatBody.scrollTop = chatBody.scrollHeight;
+
+            historialMensajes.push({ role: "user", content: t });
+
+            const cargandoId = 'cargando-' + Date.now();
+            chatBody.innerHTML += `<div class="msg ia" id="${cargandoId}"><i>Mírwen está escribiendo...</i></div>`;
+            chatBody.scrollTop = chatBody.scrollHeight;
+
+            // 1. AQUÍ PEGAS TU CLAVE DE GROQ:
+            const API_KEY = "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";
+
+            try {
+                // 2. AQUÍ SE CAMBIA LA URL DE OLLAMA POR LA DE GROQ:
+                const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: "llama-3.1-8b-instant",
+                        messages: historialMensajes,
+                        temperature: 0.7,
+                        max_tokens: 400
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error("Error en la respuesta de la nube");
+                }
+
+                const data = await response.json();
+                // 3. AQUÍ CAMBIA CÓMO SE LEE LA RESPUESTA:
+                const respuestaIA = data.choices[0].message.content;
+
+                historialMensajes.push({ role: "assistant", content: respuestaIA });
+                document.getElementById(cargandoId).innerHTML = respuestaIA;
+
+            } catch (error) {
+                console.error("Error al conectar:", error);
+                document.getElementById(cargandoId).innerHTML = "Hubo un error al intentar comunicarme con la IA.";
+            }
+
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+        document.getElementById('sendBtn').addEventListener('click', enviarMensaje);
+        userInput.addEventListener('keypress', e => {
+            if (e.key === 'Enter') enviarMensaje();
+        });
+    </script>
+    
+</body>
+</html>
