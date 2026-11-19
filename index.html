@@ -266,8 +266,7 @@
         document.getElementById('cerrarChat').addEventListener('click', () => {
             modalChat.classList.remove('show');
         });
-
-        async function enviarMensaje() {
+async function enviarMensaje() {
             const t = userInput.value.trim();
             if (!t) return;
 
@@ -287,19 +286,15 @@
             const API_KEY = k1 + k2 + k3;
 
             try {
-                // 1. Obtener dinámicamente un modelo válido de tu cuenta
                 const resModelos = await fetch("https://api.groq.com/openai/v1/models", {
                     headers: { "Authorization": "Bearer " + API_KEY }
                 });
                 const dataModelos = await resModelos.json();
-                
+
                 if (!resModelos.ok) {
-                    throw new Error(`Error de clave (${resModelos.status}): ${dataModelos.error?.message || 'Clave inválida o revocada'}`);
+                    throw new Error(`Error de clave (${resModelos.status}): ${dataModelos.error?.message || 'Clave inválida'}`);
                 }
 
-                // Filtrar modelos de chat (excluir whisper/audio)
-                // Priorizar un modelo estándar de chat en español
-                c// Excluir modelos especiales (canopylabs, whisper, guard) y elegir uno seguro
                 const modelosSeguros = dataModelos.data.filter(m => 
                     !m.id.includes("canopylabs") && 
                     !m.id.includes("whisper") && 
@@ -309,7 +304,6 @@
                 const preferido = modelosSeguros.find(m => m.id.includes("llama") || m.id.includes("gpt-oss"));
                 const modeloElegido = preferido ? preferido.id : (modelosSeguros[0]?.id || "llama-3.3-70b-versatile");
 
-                // 2. Enviar el mensaje usando ese modelo confirmado
                 const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                     method: "POST",
                     headers: {
