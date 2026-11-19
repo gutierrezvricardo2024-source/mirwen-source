@@ -299,13 +299,15 @@
 
                 // Filtrar modelos de chat (excluir whisper/audio)
                 // Priorizar un modelo estándar de chat en español
-                const preferido = dataModelos.data.find(m => 
-                    m.id.includes("llama-3.3") || 
-                    m.id.includes("gpt-oss") || 
-                    m.id.includes("mixtral") || 
-                    m.id.includes("gemma")
+                c// Excluir modelos especiales (canopylabs, whisper, guard) y elegir uno seguro
+                const modelosSeguros = dataModelos.data.filter(m => 
+                    !m.id.includes("canopylabs") && 
+                    !m.id.includes("whisper") && 
+                    !m.id.includes("guard") &&
+                    !m.id.includes("orpheus")
                 );
-                const modeloElegido = preferido ? preferido.id : "llama-3.3-70b-versatile";
+                const preferido = modelosSeguros.find(m => m.id.includes("llama") || m.id.includes("gpt-oss"));
+                const modeloElegido = preferido ? preferido.id : (modelosSeguros[0]?.id || "llama-3.3-70b-versatile");
 
                 // 2. Enviar el mensaje usando ese modelo confirmado
                 const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
