@@ -266,7 +266,8 @@
         document.getElementById('cerrarChat').addEventListener('click', () => {
             modalChat.classList.remove('show');
         });
-async function enviarMensaje() {
+
+        async function enviarMensaje() {
             const t = userInput.value.trim();
             if (!t) return;
 
@@ -336,6 +337,7 @@ async function enviarMensaje() {
 
             chatBody.scrollTop = chatBody.scrollHeight;
         }
+
         document.getElementById('sendBtn').addEventListener('click', enviarMensaje);
         userInput.addEventListener('keypress', e => {
             if (e.key === 'Enter') enviarMensaje();
