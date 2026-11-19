@@ -336,7 +336,7 @@
         document.getElementById('cerrarChat').addEventListener('click', () => {
             modalChat.classList.remove('show');
         });
-        async function enviarMensaje() {
+       async function enviarMensaje() {
             const t = userInput.value.trim();
             if (!t) return;
 
@@ -350,13 +350,11 @@
             chatBody.innerHTML += `<div class="msg ia" id="${cargandoId}"><i>Mírwen está escribiendo...</i></div>`;
             chatBody.scrollTop = chatBody.scrollHeight;
 
-            // 1. AQUÍ PEGAS TU CLAVE DE GROQ:
             const parte1 = "gsk_VSRDv4BN836yV79ZnC6YWGdy";
             const parte2 = "b3FY1cbb6F3bY2jql2OShNJN4V3Y";
             const API_KEY = parte1 + parte2;
 
             try {
-                // 2. AQUÍ SE CAMBIA LA URL DE OLLAMA POR LA DE GROQ:
                 const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                     method: "POST",
                     headers: {
@@ -376,7 +374,6 @@
                 }
 
                 const data = await response.json();
-                // 3. AQUÍ CAMBIA CÓMO SE LEE LA RESPUESTA:
                 const respuestaIA = data.choices[0].message.content;
 
                 historialMensajes.push({ role: "assistant", content: respuestaIA });
