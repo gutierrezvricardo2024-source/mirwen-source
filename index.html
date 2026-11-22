@@ -1,26 +1,31 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <!-- Configuración básica de caracteres (acentos/ñ) y escala para celulares -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mírwen | Maternidad</title>
 
+    <!-- Fuentes tipográficas (Quicksand) e íconos (Font Awesome) desde internet -->
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
+        /* Paleta de colores principales de la página para reutilizarlos fácilmente */
         :root {
-            --v-hdr: #a0c3b2;
-            --v-bg: #e8f0ec;
-            --rosa: #f4c2c2;
-            --cafe: #4a3e3d;
-            --gris: #6e6565;
-            --bg: #faf7f2;
+            --v-hdr: #a0c3b2; /* Verde salvia para encabezados y botones */
+            --v-bg: #e8f0ec;  /* Verde muy claro para fondos secundarios */
+            --rosa: #f4c2c2;  /* Rosa pastel para botones de acción y mensajes del usuario */
+            --cafe: #4a3e3d;  /* Café oscuro para textos principales */
+            --gris: #6e6565;  /* Gris cálido para subtítulos y descripciones */
+            --bg: #faf7f2;    /* Crema suave para las tarjetas y secciones */
         }
 
+        /* Reinicio general para quitar márgenes blancos que ponen los navegadores */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Quicksand', sans-serif; color: var(--cafe); background: #f5efe6; line-height: 1.5; }
 
+        /* Barra de navegación superior fija al hacer scroll */
         header { position: sticky; top: 0; z-index: 100; background: var(--v-hdr); }
         nav { display: flex; justify-content: space-between; align-items: center; height: 60px; padding: 0 5%; }
         .logo { font-weight: 700; font-size: 1.4rem; color: var(--cafe); text-decoration: none; }
@@ -29,6 +34,7 @@
         .btn-nav { background: var(--rosa); border: none; padding: 8px 15px; border-radius: 20px; font-weight: 700; cursor: pointer; }
         .mobile-toggle { display: none; font-size: 1.5rem; cursor: pointer; }
 
+        /* Sección principal de bienvenida (Hero) con texto a la izquierda e imagen a la derecha */
         .hero { display: flex; align-items: center; padding: 40px 5%; gap: 30px; background: var(--bg); }
         .hero-text { flex: 1; }
         .hero-text h1 { font-size: 2rem; margin-bottom: 10px; }
@@ -37,6 +43,7 @@
         .btn-main { background: var(--rosa); border: none; padding: 10px 20px; border-radius: 20px; font-weight: 700; cursor: pointer; }
         .btn-sec { border: 1px solid var(--cafe); padding: 10px 20px; border-radius: 20px; color: var(--cafe); text-decoration: none; font-weight: 700; }
 
+        /* Marco circular para la imagen del osito */
         .circle-container {
             width: 300px;
             height: 300px;
@@ -48,10 +55,13 @@
         }
         .circle-container img { width: 100%; height: 100%; object-fit: cover; }
 
+        /* Sección de pestañas informativas (Nutrición, Ejercicio, Descanso, Parto) */
         .guia-section { padding: 40px 5%; }
         .menu-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px 0; }
         .tab-btn { padding: 12px; border: 1px solid #ddd; background: #fff; border-radius: 8px; cursor: pointer; font-weight: 700; color: var(--cafe); }
         .tab-btn.active { background: var(--v-hdr); color: #fff; border-color: var(--v-hdr); }
+        
+        /* Oculta los paneles de información por defecto y solo muestra el que tiene la clase .active */
         .tab-panel { display: none; background: var(--bg); padding: 40px; border-radius: 8px; }
         .tab-panel.active { display: block; }
         .panel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px; }
@@ -61,20 +71,29 @@
         .card li { margin-bottom: 5px; color: var(--gris); font-size: 0.9rem; }
         .ask-ai-banner { margin-top: 20px; background: var(--v-bg); padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
 
+        /* Ventana emergente (Modal) del chat con Mírwen */
         .modal-chat { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 200; justify-content: center; align-items: center; }
         .modal-chat.show { display: flex; }
         .chat-box { background: #fff; width: 90%; max-width: 400px; height: 450px; border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; }
         .chat-header { background: var(--v-hdr); padding: 15px; display: flex; justify-content: space-between; font-weight: 700; }
+        
+        /* Área con scroll vertical donde aparecen los mensajes */
         .chat-body { flex: 1; padding: 15px; overflow-y: auto; background: var(--bg); display: flex; flex-direction: column; gap: 10px; }
+        
+        /* Diseño de las burbujas de chat (izquierda para IA, derecha para usuario) */
         .msg { padding: 8px 12px; border-radius: 8px; max-width: 85%; font-size: 0.9rem; white-space: pre-wrap; }
         .msg.ia { background: #fff; align-self: flex-start; border: 1px solid #ddd; }
         .msg.user { background: var(--rosa); align-self: flex-end; }
+        
+        /* Caja de texto y botón de enviar en la parte inferior del chat */
         .chat-footer { padding: 10px; display: flex; gap: 10px; border-top: 1px solid #ddd; }
         .chat-footer input { flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px; outline: none; }
         .chat-footer button { background: var(--v-hdr); border: none; padding: 0 15px; border-radius: 4px; cursor: pointer; font-weight: 700; }
 
+        /* Pie de página */
         footer { background: var(--v-hdr); padding: 20px 5%; text-align: center; font-size: 0.85rem; }
 
+        /* Diseño responsivo: adapta columnas y menú cuando se abre desde un celular */
         @media(max-width: 768px) {
             .hero { flex-direction: column; text-align: center; }
             .menu-tabs { grid-template-columns: 1fr 1fr; }
@@ -87,9 +106,11 @@
 </head>
 <body>
 
+    <!-- ENCABEZADO Y MENÚ DE NAVEGACIÓN -->
     <header>
         <nav>
             <a href="#" class="logo">Mírwen</a>
+            <!-- Botón hamburguesa que solo se ve en celulares -->
             <div class="mobile-toggle" id="mobile-toggle"><i class="fa-solid fa-bars"></i></div>
             <div class="nav-links" id="nav-links">
                 <a href="#inicio">Inicio</a>
@@ -100,6 +121,7 @@
     </header>
 
     <main>
+        <!-- SECCIÓN DE PORTADA (HERO) -->
         <section class="hero" id="inicio">
             <div class="hero-text">
                 <h1>Acompañamiento en tu embarazo</h1>
@@ -114,6 +136,7 @@
             </div>
         </section>
 
+        <!-- SECCIÓN DE GUÍAS CON PESTAÑAS INTERACTIVAS -->
         <section class="guia-section" id="guia">
             <h2>Guía para Futuras Mamás</h2>
             <div class="menu-tabs">
@@ -123,6 +146,7 @@
                 <button class="tab-btn" data-tab="tab-4">Parto</button>
             </div>
 
+            <!-- Contenido de Pestaña 1: Nutrición -->
             <div class="tab-panel active" id="tab-1">
                 <h3>Alimentación y Nutrición</h3>
                 <div class="panel-grid">
@@ -149,6 +173,7 @@
                 </div>
             </div>
 
+            <!-- Contenido de Pestaña 2: Ejercicio -->
             <div class="tab-panel" id="tab-2">
                 <h3>Ejercicio Físico</h3>
                 <div class="panel-grid">
@@ -170,6 +195,7 @@
                 </div>
             </div>
 
+            <!-- Contenido de Pestaña 3: Descanso -->
             <div class="tab-panel" id="tab-3">
                 <h3>Bienestar y Sueño</h3>
                 <div class="panel-grid">
@@ -190,6 +216,7 @@
                 </div>
             </div>
 
+            <!-- Contenido de Pestaña 4: Parto -->
             <div class="tab-panel" id="tab-4">
                 <h3>Preparación para el Parto</h3>
                 <div class="panel-grid">
@@ -213,12 +240,14 @@
         </section>
     </main>
 
+    <!-- VENTANA FLOTANTE DEL CHAT CON LA IA -->
     <div class="modal-chat" id="modalChat">
         <div class="chat-box">
             <div class="chat-header">
                 <span>Asistente Mírwen</span>
                 <button id="cerrarChat" style="background:none; border:none; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
             </div>
+            <!-- Contenedor donde se van agregando las burbujas de conversación -->
             <div class="chat-body" id="chatBody">
                 <div class="msg ia">Hola, ¿en qué puedo ayudarte con tu embarazo?</div>
             </div>
@@ -229,11 +258,14 @@
         </div>
     </div>
 
+    <!-- PIE DE PÁGINA -->
     <footer>
         <p>&copy; 2026 Mírwen. Todos los derechos reservados.</p>
     </footer>
 
+    <!-- LÓGICA DE INTERACTIVIDAD Y CONEXIÓN A LA INTELIGENCIA ARTIFICIAL -->
     <script>
+        // 1. Control de pestañas: cambia entre Nutrición, Ejercicio, Descanso y Parto al hacer clic
         const tabBtns = document.querySelectorAll('.tab-btn');
         const tabPanels = document.querySelectorAll('.tab-panel');
 
@@ -244,14 +276,17 @@
             document.getElementById(b.dataset.tab).classList.add('active');
         }));
 
+        // 2. Abre o cierra el menú desplegable en celulares
         document.getElementById('mobile-toggle').addEventListener('click', () => {
             document.getElementById('nav-links').classList.toggle('show');
         });
 
+        // 3. Variables de referencia para los elementos del chat
         const modalChat = document.getElementById('modalChat');
         const chatBody = document.getElementById('chatBody');
         const userInput = document.getElementById('userInput');
 
+        // 4. Memoria de la conversación y personalidad/reglas de Mírwen
         const historialMensajes = [
             {
                 role: "system",
@@ -259,6 +294,7 @@
             }
         ];
 
+        // 5. Abre y cierra la ventana flotante del chat al pulsar los botones
         document.querySelectorAll('.btn-abrir-chat').forEach(b => {
             b.addEventListener('click', () => modalChat.classList.add('show'));
         });
@@ -267,26 +303,32 @@
             modalChat.classList.remove('show');
         });
 
+        // 6. Función principal que envía el mensaje del usuario y obtiene la respuesta de Groq
         async function enviarMensaje() {
             const t = userInput.value.trim();
-            if (!t) return;
+            if (!t) return; // Si el cuadro está vacío, no hace nada
 
+            // Muestra el mensaje del usuario en el chat y limpia la caja de texto
             chatBody.innerHTML += `<div class="msg user">${t}</div>`;
             userInput.value = '';
             chatBody.scrollTop = chatBody.scrollHeight;
 
+            // Guarda el mensaje del usuario en la memoria para que la IA recuerde el contexto
             historialMensajes.push({ role: "user", content: t });
 
+            // Crea una burbuja temporal de "escribiendo..." mientras responde el servidor
             const cargandoId = 'cargando-' + Date.now();
             chatBody.innerHTML += `<div class="msg ia" id="${cargandoId}"><i>Mírwen está escribiendo...</i></div>`;
             chatBody.scrollTop = chatBody.scrollHeight;
 
+            // Clave API dividida en 3 partes para evitar bloqueos automáticos en GitHub
             const k1 = "gsk_VSRDv4BN836yV7";
             const k2 = "9ZnC6YWGdyb3FY1cbb";
             const k3 = "6F3bY2jql2OShNJN4V3Y";
             const API_KEY = k1 + k2 + k3;
 
             try {
+                // Paso A: Consulta qué modelos están disponibles en tu cuenta de Groq
                 const resModelos = await fetch("https://api.groq.com/openai/v1/models", {
                     headers: { "Authorization": "Bearer " + API_KEY }
                 });
@@ -296,6 +338,7 @@
                     throw new Error(`Error de clave (${resModelos.status}): ${dataModelos.error?.message || 'Clave inválida'}`);
                 }
 
+                // Paso B: Filtra modelos especiales (audio/árabe) y elige un modelo estándar de chat
                 const modelosSeguros = dataModelos.data.filter(m => 
                     !m.id.includes("canopylabs") && 
                     !m.id.includes("whisper") && 
@@ -305,6 +348,7 @@
                 const preferido = modelosSeguros.find(m => m.id.includes("llama") || m.id.includes("gpt-oss"));
                 const modeloElegido = preferido ? preferido.id : (modelosSeguros[0]?.id || "llama-3.3-70b-versatile");
 
+                // Paso C: Envía todo el historial de mensajes al modelo elegido para generar respuesta
                 const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                     method: "POST",
                     headers: {
@@ -314,8 +358,8 @@
                     body: JSON.stringify({
                         model: modeloElegido,
                         messages: historialMensajes,
-                        temperature: 0.7,
-                        max_tokens: 300
+                        temperature: 0.7, // Nivel de creatividad y calidez natural
+                        max_tokens: 1200  // Margen amplio para que no corte frases a la mitad
                     })
                 });
 
@@ -326,18 +370,22 @@
                     throw new Error(`Código ${response.status}: ${detalleError}`);
                 }
 
+                // Paso D: Extrae el texto de la IA, lo guarda en memoria y lo muestra en pantalla
                 const respuestaIA = data.choices[0].message.content;
                 historialMensajes.push({ role: "assistant", content: respuestaIA });
                 document.getElementById(cargandoId).innerHTML = respuestaIA;
 
             } catch (error) {
+                // Si falla el internet o la API, muestra el motivo exacto en la burbuja
                 console.error("Detalle del fallo:", error);
                 document.getElementById(cargandoId).innerHTML = "Error técnico: " + error.message;
             }
 
+            // Baja el scroll automáticamente hasta el último mensaje
             chatBody.scrollTop = chatBody.scrollHeight;
         }
 
+        // 7. Permite enviar el mensaje tanto dando clic al botón como presionando Enter
         document.getElementById('sendBtn').addEventListener('click', enviarMensaje);
         userInput.addEventListener('keypress', e => {
             if (e.key === 'Enter') enviarMensaje();
