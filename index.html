@@ -231,14 +231,12 @@
                 <p>Tu aportación nos ayuda a mantener gratuita la asistencia y las guías para futuras mamás.</p>
             </div>
             <div class="caja-canasta">
-                <h3>
-                    <span><i class="fa-solid fa-hand-holding-heart" style="color: var(--color-verde);"></i> Donaciones</span>
-                </h3>
+               
                 <form class="formulario-pago" id="datosDonacion" onsubmit="hacerDonacion(event)">
                     <input type="text" id="nombreCliente" placeholder="Nombre completo de quien está donando" required>
                     <select id="tipoPago" onchange="revisarMetodo()" required>
                         <option value="tarjeta">Tarjeta de Crédito / Débito</option>
-                        <option value="transferencia">Transferencia Bancaria (SPEI)</option>
+                        <option value="transferencia">Transferencia Bancaria </option>
                     </select>
                     <div id="cajaTarjeta" style="display: flex; flex-direction: column; gap: 8px;">
                         <input type="text" id="numeroTarj" placeholder="Número de tarjeta (16 dígitos)" maxlength="16">
@@ -248,7 +246,7 @@
                         </div>
                     </div>
                     <button type="submit" class="btn-comprar-ya">
-                        <i class="fa-solid fa-lock"></i> Confirmar y donar
+                        Confirmar y donar
                     </button>
                 </form>
                 <div class="ticket-donacion" id="notaFinal"></div>
